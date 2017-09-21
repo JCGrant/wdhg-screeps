@@ -12,9 +12,10 @@ const utils = {
     },
     
     getHarvestingContainers: function(target_room) {
+        /*
         const containers = this.getContainers(target_room);
         let valid_containers = [];
-        
+
         for(int i = 0; i < containers.length; i++) {
             let x = containers[i].pos.x;
             let y = containers[i].pos.y;
@@ -24,6 +25,7 @@ const utils = {
                 
             }
         }
+        */
         
     }
 }
