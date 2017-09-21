@@ -3,8 +3,6 @@ const utils = require("utils");
 const harvest = true;
 
 const roleBuilder = {
-
-    /** @param {Creep} creep **/
     run: function(creep) {
         // Is building and has run out of energy
 	    if(creep.memory.building && creep.carry.energy == 0) {

@@ -1,7 +1,6 @@
 const utils = require("utils");
 
 const roleSupplier = {
-    /** @param {Creep} creep **/
     run: function(creep) {
         
         if(creep.memory.supplying && creep.carry.energy == 0) {

@@ -1,8 +1,6 @@
 const utils = require("utils");
 
 const roleHarvester = {
-
-    /** @param {Creep} creep **/
     run: function(creep) {
         
         if(creep.memory.targetContainer) {

@@ -1,5 +1,4 @@
 const utils = {
-    /** @param {Creep} creep **/
     getContainers: function(target_room) {
         return target_room.find(FIND_STRUCTURES, {filter: {structureType: STRUCTURE_CONTAINER}});
     },
