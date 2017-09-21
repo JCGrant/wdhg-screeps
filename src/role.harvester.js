@@ -1,9 +1,9 @@
 const utils = require("utils");
 
-const roleHarvester = {
-    run: function(creep) {
-        
-	}
-};
+function run() {
 
-module.exports = roleHarvester;
+}
+
+module.exports = {
+    run
+};

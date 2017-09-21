@@ -23,14 +23,14 @@ function autoSpawn(role, count, body=[ WORK, CARRY, MOVE ]) {
     )};
 }
 
-module.exports.loop = function () {
-    deleteDeadCreeps();
-
+function populate() {
     autoSpawn('upgrader', 8);
     autoSpawn('builder', 3);
     autoSpawn('harvester', 2, body=[ WORK, WORK, MOVE ]);
     autoSpawn('supplier', 1);
+}
 
+function runCreeps() {
     for(const name in Game.creeps) {
         const creep = Game.creeps[name];
         
@@ -47,4 +47,10 @@ module.exports.loop = function () {
             roleSupplier.run(creep);
         }
     }
+}
+
+module.exports.loop = function () {
+    deleteDeadCreeps();
+    populate();
+    runCreeps();
 }
