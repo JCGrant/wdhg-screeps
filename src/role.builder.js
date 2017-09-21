@@ -1,6 +1,6 @@
 const utils = require("utils");
 
-const harvest = true;
+const harvest = false;
 
 function run(creep) {
     // Is building and has run out of energy
@@ -31,10 +31,10 @@ function run(creep) {
             }
         }
         else {
-            const containers = utils.getNonEmptyContainers(creep.room);
-            if(storages.length > 0) {
-                if(creep.withdraw(storages[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(storages[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            const containers = utils.getBestContainer(creep.room);
+            if(containers.length > 0) {
+                if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(container, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
         }

@@ -9,26 +9,24 @@ function getNonEmptyContainers(target_room) {
     );
 };
 
-function getHarvestingContainers(target_room) {
-    /*
-    const containers = this.getContainers(target_room);
-    let valid_containers = [];
-
-    for(int i = 0; i < containers.length; i++) {
-        let x = containers[i].pos.x;
-        let y = containers[i].pos.y;
-        if(target_room.lookForAtArea(LOOK_SOURCES, y + 1, x - 1, y - 1, x + 1).length > 0 && 
-            
-        ) {
-            
+function getBestContainer(target_room) {
+    const containers = getNonEmptyContainers(target_room);
+    let best = containers[0];
+    for(let i = 0; i < containers.length; i++) {
+        if(containers[i].energy > best.energy) {
+            best = containers[i];
         }
     }
-    */
-    
-};
+    return best;
+}
+
+function creepAt(target_room, pos) {
+    return _.some(pos.look(), { type: 'creep'});
+}
 
 module.exports = {
     getContainers,
     getNonEmptyContainers,
-    getHarvestingContainers
+    getBestContainer,
+    creepAt
 };

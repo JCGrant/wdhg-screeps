@@ -24,10 +24,10 @@ function autoSpawn(role, count, body=[ WORK, CARRY, MOVE ]) {
 }
 
 function populate() {
-    autoSpawn('upgrader', 8);
-    autoSpawn('builder', 3);
-    autoSpawn('harvester', 2, body=[ WORK, WORK, MOVE ]);
-    autoSpawn('supplier', 1);
+    autoSpawn('harvester', 3, body=[ WORK, WORK, WORK, WORK, MOVE ]);
+    autoSpawn('supplier', 2, body=[WORK, CARRY, CARRY, MOVE, MOVE]);
+    autoSpawn('upgrader', 4, body=[WORK, WORK, CARRY, CARRY, MOVE, MOVE]);
+    autoSpawn('builder', 4, body=[WORK, WORK, CARRY, CARRY, MOVE]);
 }
 
 function runCreeps() {
