@@ -1,33 +1,40 @@
-const utils = require("utils");
+const utils = require('utils');
+const filtersStructures = require('filters.structures');
 
-function getHarvestContainer(creep) {
-    return creep.pos.findClosestByPath(_.filter(
-        utils.getContainers(creep.room),
-        (container) => !utils.creepAt(creep.room, container.pos)
-    ));
+function onContainer(creep) {
+    return _.some(
+        creep.pos.look(),
+        { type: 'structure', structure: { structureType: STRUCTURE_CONTAINER }}
+    );
+}
+
+function containerAvailable(container) {
+    return container.structureType == STRUCTURE_CONTAINER &&
+        !utils.containsObject(container.pos, { type: 'creep' });
 }
 
 function moveToContainer(creep) {
-    const nearestHarvestContainer = getHarvestContainer(creep);
-    creep.moveTo(nearestHarvestContainer, {visualizePathStyle: {stroke: '#ffaa00'}});
+    const container = creep.pos.findClosestByPath(
+        FIND_STRUCTURES,
+        { filter: containerAvailable }
+    );
+    creep.moveTo(container);
 }
 
-function onContainer(creep) {
-   return  _.some(creep.pos.look(), {
-        type: 'structure',
-        structure: {structureType: STRUCTURE_CONTAINER}
-    });
+function containerNotFull(creep) {
+    return creep.pos.findClosestByRange(
+        creep.room.find(FIND_STRUCTURES, { filter: filtersStructures.CONTAINER })
+    ).store[RESOURCE_ENERGY] < CONTAINER_CAPACITY;
 }
 
 function run(creep) {
-    if(onContainer(creep)) {
+    if(onContainer(creep) && containerNotFull(creep)) {
         creep.harvest(creep.pos.findClosestByRange(FIND_SOURCES));
-    }
-    else {
+    } else {
         moveToContainer(creep);
     }
 }
 
 module.exports = {
-    run
-};
+    run,
+}

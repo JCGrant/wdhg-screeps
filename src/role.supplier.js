@@ -1,49 +1,30 @@
-const utils = require("utils");
+const utils = require('utils');
 
-var harvest = false;
-
-function getEnergy(creep) {
-    if(creep.carry.energy == creep.carryCapacity) {
-        creep.memory.supplying = true;
-        creep.say("supplying");
-    }
-    else {
-        const container = utils.getBestContainer(creep.room);
-        if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(container);
-        }
-    }
+function getTower(creep) {
+    const towers = utils.getStructuresNotFull(utils.findTowers(creep.room));
+    return creep.pos.findClosestByPath(towers);
 }
 
-function isExtension(structure) {
-    return structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity;
+function getExtension(creep) {
+    const extensions = utils.getStructuresNotFull(utils.findExtensions(creep.room));
+    return creep.pos.findClosestByPath(extensions);
+}
+
+function getSpawn(creep) {
+    return utils.findSpawn(creep.room)[0];
 }
 
 function getTarget(creep) {
-    return creep.pos.findClosestByPath(
-        FIND_STRUCTURES,
-        { filter: isExtension }
-    ) || Game.spawns["Spawn1"];
+    return getTower(creep) || getExtension(creep) || getSpawn(creep);
 }
 
-function supply(creep, target) {
-    if(creep.carry.energy <= 1) {
-        creep.memory.supplying = false;
-        creep.say("get energy");
-    }
-    else if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+function run(creep) {
+    const target = getTarget(creep);
+    if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         creep.moveTo(target);
     }
 }
 
-function run(creep) {
-    if(creep.memory.supplying) {
-        supply(creep, getTarget(creep));
-    } else {
-        getEnergy(creep);
-    }
-}
-
 module.exports = {
-    run
-};
+    run,
+}
