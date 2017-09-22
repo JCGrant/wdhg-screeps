@@ -15,7 +15,7 @@ function getSpawn(creep) {
 }
 
 function getTarget(creep) {
-    return getTower(creep) || getExtension(creep) || getSpawn(creep);
+    return getExtension(creep) || getTower(creep) || getSpawn(creep);
 }
 
 function run(creep) {

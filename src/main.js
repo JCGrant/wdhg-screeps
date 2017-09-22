@@ -1,6 +1,7 @@
 const utils = require('utils');
 const roles = require('roles');
 const controls = require('creepControls');
+const structureTower = require('structure.tower');
 
 function deleteDeadCreeps() {
     for (const name in Memory.creeps) {
@@ -22,6 +23,13 @@ function populate() {
     }
 }
 
+function runTowersInRoom(target_room) {
+    const towers = utils.findTowers(target_room);
+    for(const tower in towers) {
+        structureTower.run(towers[tower]);
+    }
+}
+
 function runCreep(creep) {
     if(creep.memory.gettingEnergy) {
         controls.getEnergy(creep);
@@ -29,6 +37,12 @@ function runCreep(creep) {
         roles[creep.memory.role].run(creep);
     }
     controls.updateGettingEnergyState(creep);
+}
+
+function runTowers() {
+    for(const room in Game.rooms) {
+        runTowersInRoom(Game.rooms[room]);
+    }
 }
 
 function runCreeps() {
@@ -40,5 +54,6 @@ function runCreeps() {
 module.exports.loop = function() {
     deleteDeadCreeps();
     populate();
+    runTowers();
     runCreeps();
 }
