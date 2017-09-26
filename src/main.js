@@ -1,59 +1,41 @@
 const utils = require('utils');
 const roles = require('roles');
-const controls = require('creepControls');
-const structureTower = require('structure.tower');
+const actions = require('actions');
 
-function deleteDeadCreeps() {
-    for (const name in Memory.creeps) {
-        if (!Game.creeps[name]) {
-            delete Memory.creeps[name];
-        }
-    }
-}
-
-function populate() {
-    for(const role in roles) {
-        if(utils.countCreepsWithRole(role) < roles[role].count) {
-            Game.spawns["Spawn1"].createCreep(
-                roles[role].body,
+const populate = (room) => {
+    for(const i in roles) {
+        const role = roles[i];
+        if(utils.countRole(room, role.title) < role.count) {
+            utils.getStructures(room, STRUCTURE_SPAWN)[0].createCreep(
+                role.body,
                 undefined,
-                { role: roles[role].title }
+                {role: role.title}
             );
         }
     }
 }
 
-function runTowersInRoom(target_room) {
-    const towers = utils.findTowers(target_room);
-    for(const tower in towers) {
-        structureTower.run(towers[tower]);
+const runCreep = (creep) => {
+    if(creep.memory.role == 'attacker') {
+        creep.memory.role = 'fighter';
     }
-}
 
-function runCreep(creep) {
     if(creep.memory.gettingEnergy) {
-        controls.getEnergy(creep);
+        actions.getEnergy(creep);
     } else {
         roles[creep.memory.role].run(creep);
     }
-    controls.updateGettingEnergyState(creep);
+    actions.updateState(creep);
 }
 
-function runTowers() {
-    for(const room in Game.rooms) {
-        runTowersInRoom(Game.rooms[room]);
+const runRoom = (room) => {
+    room.find(FIND_CREEPS).map((creep) => runCreep(creep));
+}
+
+module.exports.loop = () => {
+    for(const i in Game.rooms) {
+        const room = Game.rooms[i];
+        populate(room);
+        runRoom(room);
     }
-}
-
-function runCreeps() {
-    for(const creep in Game.creeps) {
-        runCreep(Game.creeps[creep])
-    }
-}
-
-module.exports.loop = function() {
-    deleteDeadCreeps();
-    populate();
-    runTowers();
-    runCreeps();
 }
